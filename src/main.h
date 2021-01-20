@@ -15,6 +15,17 @@ extern int rom_filesize;
 
 #define TRIM 0x4D495254
 
+#if FLASHCART
+	#define AGB_ROM  ((u8*)0x8000000)
+	#define AGB_SRAM ((u8*)0xE000000)
+	#define AGB_SRAM_SIZE SRAM_SIZE*1024
+	#define _FLASH_WRITE(pa, pd) { *(((u16 *)AGB_ROM)+((pa)/2)) = pd; __asm("nop"); }
+	extern u8 flash_type;
+	extern u32 get_flash_type();
+	void flash_write(u8 flash_type, u32 sa);
+	void save_sram_FLASH();
+#endif
+
 extern u32 max_multiboot_size;
 
 extern u32 oldinput;

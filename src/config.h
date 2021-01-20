@@ -9,6 +9,9 @@
 
 #define VERSION "v0.5"
 
+#define STATEID 0x57a731d8
+#define STATEID2 0x57a731d9
+
 //#define LITTLESOUNDDJ 0
 //Little Sound DJ Hack requires M3/G6/Supercard
 
@@ -21,6 +24,7 @@
 #define USETRIM 1
 #define MOVIEPLAYER 0
 #define MOVIEPLAYERDEBUG 0
+#define FLASHCART 1
 #define RUMBLE 1
 #define RESIZABLE 0
 #define GOMULTIBOOT 0

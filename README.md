@@ -11,6 +11,23 @@ Some notable hacks and games that have had issues fixed:
 - Pokemon Crystal (graphical corruption fixed)
 - Wario Land DX, https://www.romhacking.net/hacks/6683/ (boots)
 
+Batteryless saving: This allows Goomba Color to save its SRAM data on most modern reproduction/bootleg flash cartridges that have an SRAM chip but no battery installed. This works by writing the SRAM data into Flash ROM memory and restoring the data from Flash ROM into SRAM when booting.
+
+The Flash ROM is updated in the following instances:
+- Pressing L+R to bring up the main menu (with a prompt)
+- Writing a Save State or Quick Save State by pressing R+SELECT
+- Deleting a Save State or SRAM
+- Exiting
+
+The batteryless Goomba Color SRAM storage area in Flash ROM is dynamically determined and depends on the maximum ROM size of the flash cartridge. In case you need to extract/inject/edit something, you will find the data at ROM address `flash_size - 0x40000` and the length is 0x10000 bytes. Emulators should also be able to extract the SRAM data into a `.sav` file from a re-dumped compilation.
+
+If you need to manually specify the save data location in ROM, you can append the compiled ROM with `53 56 4C 43` (SVLC) followed by the address in little endian (`00 00 0C 00` would be offset `0xC0000` on the flash chip). Make sure the address is correctly aligned to your flash chip’s sector size and that it’s accessible from the GBA ROM space (max. 32 MB).
+
+Holding SELECT+UP+B on startup will wipe the save data in case something is not working right.
+
+Tested repro cartridge flash chips: 128W30B, 256L30B, 29LV128DT, M36L0R7050T, M36L0R8060T, GL128S, M29W128FH, MSP55LV128M
+
+
 To build:
 - Install the latest DevkitPro GBA tools
 - Navigate Msys2 to this directory
@@ -30,3 +47,4 @@ Thanks to:
 - Nuvie for the code that saves the desired Game Boy type per game.
 - Radimerry for the MGS:Ghost Babel elevator fix, Faceball menu fix, and SMLDX SRAM fix.
 - Therealteamplayer for the default-to-grayscale code for GB games if no SGB palette is found.
+- lesserkuma for batteryless saving mod, which you can find at https://github.com/lesserkuma/goombacolor
