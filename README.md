@@ -9,11 +9,11 @@ The games I'd like to get running are:
 - Pokemon Crystal.  Heavy graphical corruption after displaying text.
 
 To build:
-Install the latest DevkitPro GBA tools
-Navigate to this directory
-make
-Rename font.lz77.o to font.o and fontpal.bin.o to fontpal.o
-make
+- Install the latest DevkitPro GBA tools
+- Navigate to this directory
+- make
+- Rename font.lz77.o to font.o and fontpal.bin.o to fontpal.o
+- make
 
 To test, I build a ROM with the resulting goomba.gba and the game I'm testing using goombafront.exe, then run it in mGBA.  You can find goombafront.exe as part of the Goomba Color releases.
 
