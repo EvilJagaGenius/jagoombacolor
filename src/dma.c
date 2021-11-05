@@ -101,14 +101,14 @@ void VRAM_CODE DoDma(int byteCountRemaining)
 	while (byteCountRemaining > 0)
 	{
 		//first do range and count checking to make memory blocks contiguous
-		
+	
 		int byteCount = byteCountRemaining;
 		byteCountRemaining = 0;
 		
 		int src = _dma_src;
 		
 		int srcEnd = src + byteCount;
-		int srcEndBlock = (srcEnd - 1) & 0xF000;
+		int srcEndBlock = (srcEnd - 1) & 0xF000;  // What do all these hex values mean
 		int srcBlock = src & 0xF000;
 		
 		if (src < 0x8000)
@@ -239,7 +239,11 @@ void VRAM_CODE DoDma(int byteCountRemaining)
                 }
             /*} else {  // HDMA
                 // Do something, Taipu
-                // Copy a chunk and return
+                byteCount = 16;  // HDMA only copies 16 bytes at a time
+                memcpy32(destAddress, sourceAddress, byteCount);
+                if (done) {  // How do we check this?
+                    _doing_hdma = 0x00;
+                }
             }*/
 		} // else {}  // I guess DMA mode 1 is unused
 		
@@ -248,6 +252,7 @@ void VRAM_CODE DoDma(int byteCountRemaining)
 		_dma_dest += byteCount;
 		_dma_dest &= ~0xE000;
 		_dma_dest |= 0x8000;
+        if (_doing_hdma) break;
 	}
 }
 

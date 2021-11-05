@@ -786,8 +786,11 @@ FF55_W:	@HDMA5
 	
 	@immediately steal cycles if it's not HDMA
 	bne not_general_dma
-    @ Set doing_hdma
-    ldr r1,=_doing_hdma
+    @ I presume the HDMA code goes here then..?  Considering the presence of cyclesperscanline
+    @ Set _doing_hdma to true (0xFF)
+    @mov r2,#0xFF
+    @ldr r1,=_doing_hdma
+    @strb r2,[r1]
     
 	ldr_ r1,cyclesperscanline
 	cmp r1,#DOUBLE_SPEED
@@ -795,8 +798,9 @@ FF55_W:	@HDMA5
 	moveq r1,r1,lsl#1
 	mov r1,r1,lsl#(3 + CYC_SHIFT)
 	sub cycles,cycles,r1
+    @ If we're doing HDMA code, I don't think we want to fall through here
+    @bx lr
 not_general_dma:
-	
 	stmfd sp!,{r3,lr}
 	add r0,r0,#1
 	mov r0,r0,lsl#4

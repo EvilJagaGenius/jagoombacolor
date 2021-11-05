@@ -3479,6 +3479,13 @@ FF41_W:@		LCD Status
 	strb r2,lcdstat
 	strb r2,lcdstat2
 	b lcdyc_check
+    
+    @ If _doing_hdma, call DoDma()... this might need to go somewhere else
+    @mov r0,#16          @ If we're doing hdma, only copy 16 bytes per hblank.  Don't know if r0's being used here
+    @ldr r1,=_doing_hdma
+    @ldr r1,[r1]
+    @cmp r1,#0xFF
+    @blxeq_long DoDma
 
 #if 0	
 	ands r1,r2,r0       @which bits have changed from 0 to 1?
