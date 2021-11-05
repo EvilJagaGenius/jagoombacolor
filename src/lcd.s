@@ -4699,6 +4699,10 @@ FF69_W:	@BCPD - BG Color Palette Data
 	strb r0,[addy,r2]
 	tst r1,#0x80
 	addne r1,r1,#1
+    @Minucce's tweaks
+    andne r1, r1, #0x3F
+    orrne r1, r1, #0x80
+    
 	strneb_ r1,BCPS_index
 	bx lr
 @FF69_W	;BCPD - BG Color Palette Data
@@ -4746,6 +4750,10 @@ FF6B_W:	@OCPD - OBJ Color Palette Data
 	strb r0,[addy,r2]
 	tst r1,#0x80
 	addne r1,r1,#1
+    @ Minucce's tweaks
+    andne r1, r1, #0x3F
+    orrne r1,r1,#0x80
+    
 	strneb_ r1,OCPS_index
 	bx lr
 @FF6B_W	;OCPD - OBJ Color Palette Data
