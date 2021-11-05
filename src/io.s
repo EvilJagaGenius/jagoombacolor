@@ -7,6 +7,8 @@
 @	#include "gbz80mac.h"
 @	#include "sgb.h"
 	
+    @.global _doing_hdma
+    
 	global_func _E0
 	global_func _E2
 	global_func _F0
@@ -784,6 +786,9 @@ FF55_W:	@HDMA5
 	
 	@immediately steal cycles if it's not HDMA
 	bne not_general_dma
+    @ Set doing_hdma
+    ldr r1,=_doing_hdma
+    
 	ldr_ r1,cyclesperscanline
 	cmp r1,#DOUBLE_SPEED
 	add r1,r0,#1

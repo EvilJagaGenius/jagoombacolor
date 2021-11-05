@@ -176,6 +176,7 @@
 	
 	.global _dma_src
 	.global _dma_dest
+    .global _doing_hdma
 	.global _dirty_tile_bits
 @	.global _dirty_tiles
 @	.global _dirty_rows

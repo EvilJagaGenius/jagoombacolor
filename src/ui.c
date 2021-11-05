@@ -425,7 +425,7 @@ char *const clocktxt[]={"Full","Half speed"};
 char *const lcdhacktxt[]={"OFF","Low","Medium","High"};
 //char *const dmamodetxt[]={"Buffered", "Direct to VRAM", "WayForward"};
 
-#define EMUNAME "Goomba Color"
+#define EMUNAME "Jagoomba Color"
 //char *const emuname = "Goomba Color ";
 char *const palnumtxt[]={"0","1","2","3"};
 
@@ -446,7 +446,7 @@ void drawui1()
 	
 	strmerge(str,EMUNAME " " VERSION " on ",hostname[(u32)gbaversion]);
 	drawtext(18,str,0);
-	drawtext(19,"by Flubba and Dwedit",0);
+	drawtext(19,"By Flubba, Dwedit, Jaga",0);
 
 	print_1("B autofire: ",autotxt[autoB]);
 	print_1("A autofire: ",autotxt[autoA]);
