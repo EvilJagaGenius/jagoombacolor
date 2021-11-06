@@ -11,8 +11,8 @@ void UpdateTiles1(u8 *sourceAddress, int byteCount, int vramAddress1);
 void UpdateTiles2(u8 *sourceAddress, int byteCount, int vramAddress1);
 void UpdateTiles3(u8 *sourceAddress, int byteCount, int vramAddress1);
 
-void DoDma();
-//void DoDma(int byteCountRemaining);
+//void DoDma();
+void DoDma(int byteCountRemaining);
 
 /*
 extern u8* _vram_packet_dest;

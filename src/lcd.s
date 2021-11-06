@@ -1853,9 +1853,10 @@ mode2_update_scroll:
 @nowindow
 entermode0:  @ Start of HBlank
     @ Assuming this falls through to the function below
-    ldr r0,=_doing_hdma
-    ldr r0,[r0]
-    cmp r0,#0xFF
+    mov r0,#16
+    ldr r1,=_doing_hdma
+    ldr r1,[r1]
+    cmp r1,#0xFF
     blxeq_long DoDma  @ Call DoDma if we're doing HDMA
 @	ldrb r0,rendermode
 @	cmp r0,#0

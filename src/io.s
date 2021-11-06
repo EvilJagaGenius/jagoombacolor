@@ -821,7 +821,7 @@ not_general_dma:
     @ Otherwise, we fall through here and do a general DMA transfer
 	stmfd sp!,{r3,lr}
 	add r0,r0,#1
-	mov r0,r0,lsl#4  @ r0 contains the # of blocks we want to move, multiply by 16 to get # of bytes?.. we don't need this anymore
+	mov r0,r0,lsl#4  @ r0 contains the # of blocks we want to move, multiply by 16 to get # of bytes?
     @ I think r0 contains the # of blocks, store it
     ldr r1,=_dma_blocks_remaining
     strb r0,[r1]
@@ -1294,10 +1294,10 @@ FF54_R:	@HDMA4
 FF55_R:	@HDMA5
     ldr r0,=_dma_blocks_remaining
     ldr r0,[r0]
-    ldr r1,=_doing_hdma  @ I hope r1 isn't being used for anything right then
-    ldr r1,[r1]
-    cmp r1,#0xFF
-    movne r0,#0xFF  @ Replace line directly below
+    @ldr r1,=_doing_hdma  @ I hope r1 isn't being used for anything right then
+    @ldr r1,[r1]
+    @cmp r1,#0xFF
+    @movne r0,#0xFF  @ Replace line directly below
 	@mov r0,#0xFF
 	mov pc,lr
 

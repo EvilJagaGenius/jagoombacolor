@@ -97,15 +97,15 @@ static __inline VRAM_CODE void SetDirtyTiles(int dest, int byteCount)
 	}
 }
 
-void VRAM_CODE DoDma()
-//void VRAM_CODE DoDma(int byteCountRemaining) 
+//void VRAM_CODE DoDma()
+void VRAM_CODE DoDma(int byteCountRemaining) 
 {
-    int byteCountRemaining = (_dma_blocks_remaining << 4);
+    //int byteCountRemaining = (_dma_blocks_remaining << 4);
 	while (byteCountRemaining > 0)
 	{
 		//first do range and count checking to make memory blocks contiguous
 		int byteCount = byteCountRemaining;
-        if (_doing_hdma && _dmamode != 2) {byteCount = 16;}
+        //if (_doing_hdma && _dmamode != 2) {byteCount = 16;}
 		byteCountRemaining = 0;
 		
 		int src = _dma_src;
@@ -193,10 +193,10 @@ void VRAM_CODE DoDma()
     if (_doing_hdma) {
         if (_dma_blocks_remaining == 0) {  // If we're done with the HDMA
             _doing_hdma = 0x00;
-            //_dma_blocks_remaining = 0xFF;  // Means transfer was complete
+            _dma_blocks_remaining = 0xFF;  // Means transfer was complete
         }
     } else {  // General DMA transfer is complete
-        //_dma_blocks_remaining = 0xFF;
+        _dma_blocks_remaining = 0xFF;
     }
 }
 
