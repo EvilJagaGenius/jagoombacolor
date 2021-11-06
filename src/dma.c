@@ -97,15 +97,12 @@ static __inline VRAM_CODE void SetDirtyTiles(int dest, int byteCount)
 	}
 }
 
-//void VRAM_CODE DoDma()
 void VRAM_CODE DoDma(int byteCountRemaining) 
 {
-    //int byteCountRemaining = (_dma_blocks_remaining << 4);
 	while (byteCountRemaining > 0)
 	{
 		//first do range and count checking to make memory blocks contiguous
 		int byteCount = byteCountRemaining;
-        //if (_doing_hdma && _dmamode != 2) {byteCount = 16;}
 		byteCountRemaining = 0;
 		
 		int src = _dma_src;
@@ -141,7 +138,7 @@ void VRAM_CODE DoDma(int byteCountRemaining)
 		u8 *sourceAddress = GetRealAddress(src);
 		
 		
-		if (_dmamode == 2)  // _dmamode 2 is for WayForward games, leave alone
+		if (_dmamode == 2)  // _dmamode 2 is for sprites in WayForward games, leave alone
 		{
 			u8 *destAddress = GetRealAddress(dest);
 			if (dest == 0x8000 && src == dmaBaseAddress)  // 0x8000 = lowest VRAM destination?
@@ -168,8 +165,6 @@ void VRAM_CODE DoDma(int byteCountRemaining)
 		{
 			//do the memory copy
 			u8 *destAddress = GetRealAddress(dest);
-			// Same block as on line 151
-            if (_doing_hdma) {_dma_blocks_remaining -= 1;}
             if (dest >= 0x9800)
             {
                 copy_map_and_compare(destAddress, sourceAddress, byteCount, &dirty_map_words[(dest - 0x9800) / 32]);
@@ -187,7 +182,10 @@ void VRAM_CODE DoDma(int byteCountRemaining)
 		_dma_dest += byteCount;
 		_dma_dest &= ~0xE000;
 		_dma_dest |= 0x8000;
-        if (_doing_hdma) break;
+        if (_doing_hdma) {
+            _dma_blocks_remaining -= 1;
+            break;
+        }
 	}
     // Out of the while loop
     if (_doing_hdma) {
