@@ -789,21 +789,22 @@ FF55_W:	@HDMA5
 	bne not_general_dma
     @ I presume the HDMA code goes here then..?  Considering the presence of cyclesperscanline
     @ Set _doing_hdma to true (0xFF)
-    mov r2,#0xFF
-    ldr r1,=_doing_hdma
-    strb r2,[r1]
+    mov r4,#0xFF
+    ldr r5,=_doing_hdma
+    strb r4,[r5]
     
+    add r0,r0,#1
 	ldr_ r1,cyclesperscanline
 	cmp r1,#DOUBLE_SPEED
-	add r1,r0,#1
-	moveq r1,r1,lsl#1
-	mov r1,r1,lsl#(3 + CYC_SHIFT)
-	sub cycles,cycles,r1
+    lsleq r0,r0,#1  @ If in double-speed mode, double the blocks to move
+	@add r1,r0,#1
+	@moveq r1,r1,lsl#1
+	@mov r1,r1,lsl#(3 + CYC_SHIFT)
+	@sub cycles,cycles,r1
     
-    @ Pretty sure r1 has served its purpose at this point
     @ Let's store r0 (# of blocks to move) into a global var, instead of passing it as an argument
-    ldr r1,=_dma_blocks_remaining
-    strb r0,[r1]
+    ldr r2,=_dma_blocks_remaining
+    strb r0,[r2]
     
     @ If we're doing HDMA code, I don't think we want to fall through here, just return
     bx lr
@@ -817,13 +818,13 @@ not_general_dma:
     cmp r2,#0xFF
     bxeq lr  @ Return if _doing_hdma was true
     
-    @ Otherwise, we fall through here and execute a general DMA transfer
+    @ Otherwise, we fall through here and do a general DMA transfer
 	stmfd sp!,{r3,lr}
 	add r0,r0,#1
+	mov r0,r0,lsl#4  @ r0 contains the # of blocks we want to move, multiply by 16 to get # of bytes?.. we don't need this anymore
     @ I think r0 contains the # of blocks, store it
     ldr r1,=_dma_blocks_remaining
     strb r0,[r1]
-	mov r0,r0,lsl#4  @ r0 contains the # of blocks we want to move, multiply by 16 to get # of bytes?.. we don't need this anymore
 @	mov r11,r11
 	blx_long DoDma
 	ldmfd sp!,{r3,pc}

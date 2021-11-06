@@ -169,22 +169,16 @@ void VRAM_CODE DoDma()
 			//do the memory copy
 			u8 *destAddress = GetRealAddress(dest);
 			// Same block as on line 151
-            if (!_doing_hdma) {  // General DMA
-                if (dest >= 0x9800)
-                {
-                    copy_map_and_compare(destAddress, sourceAddress, byteCount, &dirty_map_words[(dest - 0x9800) / 32]);
-                    //_set_bg_cache_full(2);
-                }
-                else
-                {
-                    memcpy32(destAddress, sourceAddress, byteCount);
-                    SetDirtyTiles(dest, byteCount);
-                }
-            } else {  // HDMA
-                // Do something, Taipu
-                //byteCount = 16;  // HDMA only copies a block/16 bytes at a time
+            if (_doing_hdma) {_dma_blocks_remaining -= 1;}
+            if (dest >= 0x9800)
+            {
+                copy_map_and_compare(destAddress, sourceAddress, byteCount, &dirty_map_words[(dest - 0x9800) / 32]);
+                //_set_bg_cache_full(2);
+            }
+            else
+            {
                 memcpy32(destAddress, sourceAddress, byteCount);
-                _dma_blocks_remaining -= 1;
+                SetDirtyTiles(dest, byteCount);
             }
 		} // else {}  // I guess DMA mode 1 is unused
 		
@@ -197,12 +191,12 @@ void VRAM_CODE DoDma()
 	}
     // Out of the while loop
     if (_doing_hdma) {
-        if (_dma_blocks_remaining <= 0) {  // If we're done with the HDMA
+        if (_dma_blocks_remaining == 0) {  // If we're done with the HDMA
             _doing_hdma = 0x00;
-            _dma_blocks_remaining = 0xFF;  // Means transfer was complete
+            //_dma_blocks_remaining = 0xFF;  // Means transfer was complete
         }
     } else {  // General DMA transfer is complete
-        _dma_blocks_remaining = 0xFF;
+        //_dma_blocks_remaining = 0xFF;
     }
 }
 
