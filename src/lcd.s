@@ -177,6 +177,7 @@
 	.global _dma_src
 	.global _dma_dest
     .global _doing_hdma
+    .global _dma_blocks_remaining
 	.global _dirty_tile_bits
 @	.global _dirty_tiles
 @	.global _dirty_rows
@@ -1850,7 +1851,12 @@ mode2_update_scroll:
 	bx lr
 	
 @nowindow
-entermode0:
+entermode0:  @ Start of HBlank
+    @ Assuming this falls through to the function below
+    ldr r0,=_doing_hdma
+    ldr r0,[r0]
+    cmp r0,#0xFF
+    blxeq_long DoDma  @ Call DoDma if we're doing HDMA
 @	ldrb r0,rendermode
 @	cmp r0,#0
 @	moveq r1,pc

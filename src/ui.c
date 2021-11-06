@@ -446,7 +446,7 @@ void drawui1()
 	
 	strmerge(str,EMUNAME " " VERSION " on ",hostname[(u32)gbaversion]);
 	drawtext(18,str,0);
-	drawtext(19,"By Flubba, Dwedit, Jaga",0);
+	drawtext(19,"By FluBBa, Dwedit, Jaga",0);
 
 	print_1("B autofire: ",autotxt[autoB]);
 	print_1("A autofire: ",autotxt[autoA]);
@@ -518,6 +518,7 @@ void drawui4()
 #endif
 	print_2("Double Speed: ",clocktxt[doubletimer==1]);
 	print_2("LCD scanline hack: ", lcdhacktxt[g_lcdhack]);
+    // Maybe we should add an option here for our HDMA experiment
 //	print_2("DMA Mode: ", dmamodetxt[_dmamode]);
 }
 

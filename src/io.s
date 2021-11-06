@@ -785,12 +785,13 @@ FF55_W:	@HDMA5
 	bic r0,r0,#0x80
 	
 	@immediately steal cycles if it's not HDMA
+    @ Wait a minute.  If it's not HDMA, that means bit 7 = 0... so if _doing_hdma, set _doing_hdma = false (0x00)
 	bne not_general_dma
     @ I presume the HDMA code goes here then..?  Considering the presence of cyclesperscanline
     @ Set _doing_hdma to true (0xFF)
-    @mov r2,#0xFF
-    @ldr r1,=_doing_hdma
-    @strb r2,[r1]
+    mov r2,#0xFF
+    ldr r1,=_doing_hdma
+    strb r2,[r1]
     
 	ldr_ r1,cyclesperscanline
 	cmp r1,#DOUBLE_SPEED
@@ -798,12 +799,31 @@ FF55_W:	@HDMA5
 	moveq r1,r1,lsl#1
 	mov r1,r1,lsl#(3 + CYC_SHIFT)
 	sub cycles,cycles,r1
-    @ If we're doing HDMA code, I don't think we want to fall through here
-    @bx lr
+    
+    @ Pretty sure r1 has served its purpose at this point
+    @ Let's store r0 (# of blocks to move) into a global var, instead of passing it as an argument
+    ldr r1,=_dma_blocks_remaining
+    strb r0,[r1]
+    
+    @ If we're doing HDMA code, I don't think we want to fall through here, just return
+    bx lr
 not_general_dma:
+    @ Bit 7 was set to 0.  Were we doing HDMA?  If so, stop.
+    ldr r1,=_doing_hdma  @ Don't know what registers are in use here
+    ldr r2,[r1]
+    mov r3,#0x00
+    @ Regardless we want to set _doing_hdma to false
+    strb r3,[r1]
+    cmp r2,#0xFF
+    bxeq lr  @ Return if _doing_hdma was true
+    
+    @ Otherwise, we fall through here and execute a general DMA transfer
 	stmfd sp!,{r3,lr}
 	add r0,r0,#1
-	mov r0,r0,lsl#4
+    @ I think r0 contains the # of blocks, store it
+    ldr r1,=_dma_blocks_remaining
+    strb r0,[r1]
+	mov r0,r0,lsl#4  @ r0 contains the # of blocks we want to move, multiply by 16 to get # of bytes?.. we don't need this anymore
 @	mov r11,r11
 	blx_long DoDma
 	ldmfd sp!,{r3,pc}
@@ -1271,7 +1291,13 @@ FF54_R:	@HDMA4
 	ldrb_ r0,dma_dest
 	mov pc,lr
 FF55_R:	@HDMA5
-	mov r0,#0xFF
+    ldr r0,=_dma_blocks_remaining
+    ldr r0,[r0]
+    ldr r1,=_doing_hdma  @ I hope r1 isn't being used for anything right then
+    ldr r1,[r1]
+    cmp r1,#0xFF
+    movne r0,#0xFF  @ Replace line directly below
+	@mov r0,#0xFF
 	mov pc,lr
 
 

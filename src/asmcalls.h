@@ -205,6 +205,7 @@ extern u16 _dma_src;
 extern u16 _dma_dest;
 extern u8 _vrambank;
 extern u8 _doing_hdma;
+extern u8 _dma_blocks_remaining;
 
 extern u8 gbc_palette[];
 
