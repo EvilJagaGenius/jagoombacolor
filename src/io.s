@@ -1297,8 +1297,10 @@ FF54_R:	@HDMA4
 	ldrb_ r0,dma_dest
 	mov pc,lr
 FF55_R:	@HDMA5
-    ldr r0,=_dma_blocks_remaining
-    ldr r0,[r0]
+    ldrb_ r0,_dma_blocks_remaining
+    cmp r0,#0xFF
+    subne r0,r0,#1
+    @ldr r0,[r0]
     @ldr r1,=_doing_hdma  @ I hope r1 isn't being used for anything right then
     @ldr r1,[r1]
     @cmp r1,#0xFF
