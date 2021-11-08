@@ -1851,13 +1851,16 @@ mode2_update_scroll:
 	bx lr
 	
 @nowindow
-entermode0:  @ Start of HBlank
-    @ Assuming this falls through to the function below
+entermode0:
+    stmfd sp!,{r3,lr}
     mov r0,#16
-    ldr r1,=_doing_hdma
-    ldr r1,[r1]
+    ldrb_ r1,doublespeed
+    cmp r1,#0
+    movne r0,#32  @ Double speed, copy 32 bytes
+    ldrb_ r1,doing_hdma
     cmp r1,#0xFF
-    blxeq_long DoDma  @ Call DoDma if we're doing HDMA
+    blxeq_long DoDma
+    ldmfd sp!,{r3,lr}
 @	ldrb r0,rendermode
 @	cmp r0,#0
 @	moveq r1,pc
@@ -4961,7 +4964,7 @@ _scanline:
 g_scanline:	.byte 0 @scanline
 _lcdyc:
 	.byte 0 @lcdyc
-	.byte 0 @[unused] dma start address
+_dma_blocks_remaining:	.byte 0 @dma_blocks_remaining @[unused] dma start address
 _bgpalette:
 	.byte 0 @bgpalette
 _ob0palette:
@@ -5024,7 +5027,7 @@ ui_border_visible:	.byte 0 @_ui_border_visible
 sgb_palette_number: .byte 0 @_sgb_palette_number
 gammavalue:	.byte 0 @_gammavalue
 darkness:	.byte 0 @_darkness
-	.byte 0
+_doing_hdma:	.byte 0 @doing_hdma
 
 _ui_border_cnt_bic:
 	.word 0 @ui_border_cnt_bic

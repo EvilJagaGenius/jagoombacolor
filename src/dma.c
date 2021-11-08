@@ -102,6 +102,7 @@ void VRAM_CODE DoDma(int byteCountRemaining)
 	while (byteCountRemaining > 0)
 	{
 		//first do range and count checking to make memory blocks contiguous
+	
 		int byteCount = byteCountRemaining;
 		byteCountRemaining = 0;
 		
@@ -138,7 +139,7 @@ void VRAM_CODE DoDma(int byteCountRemaining)
 		u8 *sourceAddress = GetRealAddress(src);
 		
 		
-		if (_dmamode == 2)  // _dmamode 2 is for sprites in WayForward games, leave alone
+		if (_dmamode == 2)  // _dmamode 2 is for WayForward games, leave alone
 		{
 			u8 *destAddress = GetRealAddress(dest);
 			if (dest == 0x8000 && src == dmaBaseAddress)  // 0x8000 = lowest VRAM destination?
@@ -189,12 +190,12 @@ void VRAM_CODE DoDma(int byteCountRemaining)
 	}
     // Out of the while loop
     if (_doing_hdma) {
-        if (_dma_blocks_remaining == 0) {  // If we're done with the HDMA
+        if (_dma_blocks_remaining == 0) {  // If we're done with HDMA
             _doing_hdma = 0x00;
-            _dma_blocks_remaining = 0xFF;  // Means transfer was complete
+            _dma_blocks_remaining = 0xFF;
+        } else {  // General DMA transfer is complete
+            _dma_blocks_remaining = 0xFF;
         }
-    } else {  // General DMA transfer is complete
-        _dma_blocks_remaining = 0xFF;
     }
 }
 

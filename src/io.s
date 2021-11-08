@@ -7,6 +7,7 @@
 @	#include "gbz80mac.h"
 @	#include "sgb.h"
 	
+    @.global _doing_hdma
     
 	global_func _E0
 	global_func _E2
@@ -787,52 +788,32 @@ FF55_W:	@HDMA5
     @ Wait a minute.  If it's not HDMA, that means bit 7 = 0... so if _doing_hdma, set _doing_hdma = false (0x00)
 	bne not_general_dma
     
-    @ Something we did broke compatibility with Shantae, trying to fix
-    ldrb_ r1,dmamode
-    cmp r1,#2  @ See if _dmamode == 2, which is what Shantae and WayForward games use
-    beq shantae_compat
-    
     @ HDMA code goes below
-    @ Set _doing_hdma to true (0xFF)
     mov r1,#0xFF
     ldr r2,=_doing_hdma
     strb r1,[r2]
     
-    @ Let's store r0 (# of blocks to move) into a global var, instead of passing it as an argument
-    ldr r2,=_dma_blocks_remaining
-    add r0,r0,#1
-    strb r0,[r2]
-    
-    @ If we're doing HDMA code, I don't think we want to fall through here, just return
-    bx lr
-    
-shantae_compat:
-    ldr_ r1,cyclesperscanline
+	ldr_ r1,cyclesperscanline
 	cmp r1,#DOUBLE_SPEED
 	add r1,r0,#1
+    ldr r2,=_dma_blocks_remaining
+    strb r1,[r2]
 	moveq r1,r1,lsl#1
 	mov r1,r1,lsl#(3 + CYC_SHIFT)
 	sub cycles,cycles,r1
-    @ Fall through
+    @ If we're doing HDMA code, I don't think we want to fall through here
+    bx lr
 not_general_dma:
-    @ Bit 7 was set to 0.  Were we doing HDMA?  If so, stop.
-    ldr r1,=_doing_hdma  @ Don't know what registers are in use here
-    ldr r2,[r1]
-    mov r3,#0x00
-    @ Regardless we want to set _doing_hdma to false
-    strb r3,[r1]
-    cmp r2,#0xFF
-    bxeq lr  @ Return if _doing_hdma was true
-    @ Otherwise, we fall through here and do a general DMA transfer
+    ldr r2,=_doing_hdma
+    mov r1,#0x00
+    strb r1,[r2]  @ Set _doing_hdma to false
     
 	stmfd sp!,{r3,lr}
 	add r0,r0,#1
-    ldr r1,=_dma_blocks_remaining
-    strb r0,[r1]  @ I think r0 contains the # of blocks, store it
-	mov r0,r0,lsl#4  @ r0 contains the # of blocks we want to move, multiply by 16 to get # of bytes?
+	mov r0,r0,lsl#4
 @	mov r11,r11
 	blx_long DoDma
-	ldmfd sp!,{r3,pc}
+	ldmfd sp!,{r3,pc}  @ This is a glorified bx lr that preserves the state of the program before we called DoDma... how can I replicate this without making it a return statement
 @	bx lr
 	
 @r0 = dest, r1 = src, r2 = byteCount, r3 = dirtyMapBits
@@ -1297,15 +1278,11 @@ FF54_R:	@HDMA4
 	ldrb_ r0,dma_dest
 	mov pc,lr
 FF55_R:	@HDMA5
-    ldrb_ r0,_dma_blocks_remaining
-    cmp r0,#0xFF
-    subne r0,r0,#1
-    @ldr r0,[r0]
-    @ldr r1,=_doing_hdma  @ I hope r1 isn't being used for anything right then
-    @ldr r1,[r1]
-    @cmp r1,#0xFF
-    @movne r0,#0xFF  @ Replace line directly below
-	@mov r0,#0xFF
+    ldrb_ r0,dma_blocks_remaining
+    ldrb_ r1,doing_hdma
+    cmp r1,#0xFF
+    subne r0,r0,#1  @ If not mid-hdma, subtract 1
+    @orrne r0,r0,#0x80
 	mov pc,lr
 
 
