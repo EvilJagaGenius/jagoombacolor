@@ -800,6 +800,7 @@ FF55_W:	@HDMA5
     
     @ Let's store r0 (# of blocks to move) into a global var, instead of passing it as an argument
     ldr r2,=_dma_blocks_remaining
+    add r0,r0,#1
     strb r0,[r2]
     
     @ If we're doing HDMA code, I don't think we want to fall through here, just return
@@ -826,10 +827,9 @@ not_general_dma:
     
 	stmfd sp!,{r3,lr}
 	add r0,r0,#1
-	mov r0,r0,lsl#4  @ r0 contains the # of blocks we want to move, multiply by 16 to get # of bytes?
-    @ I think r0 contains the # of blocks, store it
     ldr r1,=_dma_blocks_remaining
-    strb r0,[r1]
+    strb r0,[r1]  @ I think r0 contains the # of blocks, store it
+	mov r0,r0,lsl#4  @ r0 contains the # of blocks we want to move, multiply by 16 to get # of bytes?
 @	mov r11,r11
 	blx_long DoDma
 	ldmfd sp!,{r3,pc}
