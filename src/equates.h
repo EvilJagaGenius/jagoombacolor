@@ -390,7 +390,7 @@ RECENT_TILENUM_SIZE = 128
 
  _m_ scanline,1
  _m_ lcdyc,1
- _m_ ,1
+ _m_ dma_blocks_total,1
  _m_ bgpalette,1
 
  _m_ ob0palette,1
@@ -429,7 +429,7 @@ RECENT_TILENUM_SIZE = 128
  _m_ _sgb_palette_number,1
  _m_ _gammavalue,1
  _m_ _darkness,1
- _m_ _doing_hdma,1  @_m_ ,1
+ _m_ dma_blocks_remaining,1
 
  _m_ ui_border_cnt_bic,4
  _m_ ui_border_cnt_orr,4

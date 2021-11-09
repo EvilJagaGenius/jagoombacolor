@@ -6,7 +6,6 @@
 extern u16 _dma_src;
 extern u16 _dma_dest;
 extern u8 _vrambank;
-extern u8 _doing_hdma;
 
 //void UpdateTiles1(u8 *sourceAddress, int byteCount, int vramAddress1);
 //void UpdateTiles2(u8 *sourceAddress, int byteCount, int vramAddress1);
@@ -165,86 +164,16 @@ void VRAM_CODE DoDma(int byteCountRemaining)
 		{
 			//do the memory copy
 			u8 *destAddress = GetRealAddress(dest);
-			/*
-			if (_dmamode == 2 && dest == 0x8000 && src == dmaBaseAddress)
-			{
-				//force the packets to finish
-				new_dma_packet(NULL, NULL);
-				
-				while (byteCount > 0)
-				{
-					int byteCountInitial = byteCount;
-					u8 *nextStartAddress = sourceAddress + byteCount;
-					
-					for (int i=0; i < MAX_PACKETS; i++)
-					{
-						//do we have a packet for this address?
-						VramPacketData *packet = &vram_packets[i];
-						if (packet->dest != NULL)
-						{
-							if (packet->dest == sourceAddress)
-							{
-								if (packet->dirty)
-								{
-									memcpy32(destAddress, sourceAddress, packet->length);
-									SetDirtyTiles(dest, packet->length);
-									packet->dirty = 0;
-								}
-								dest += packet->length;
-								destAddress += packet->length;
-								sourceAddress += packet->length;
-								byteCount -= packet->length;
-							}
-							else
-							{
-								if (nextStartAddress > packet->dest && packet->dest > sourceAddress)
-								{
-									nextStartAddress = packet->dest;
-								}
-							}
-						}
-					}
-					if (byteCountInitial == byteCount && byteCount > 0)
-					{
-						int length = nextStartAddress - sourceAddress;
-						
-						//nothing registered?
-						//do a memory copy anyway
-						//memcpy32(destAddress, sourceAddress, length);
-						//SetDirtyTiles(dest, length);
-						dest += length;
-						destAddress += length;
-						sourceAddress += length;
-						byteCount -= length;
-					}
-				}
-			}
-			else
-			{
-				memcpy32(destAddress, sourceAddress, byteCount);
-				SetDirtyTiles(dest, byteCount);
-			}
-			*/
-			// Same block as on line 151
-            //if (!_doing_hdma) {  // General DMA
-                if (dest >= 0x9800)
-                {
-                    copy_map_and_compare(destAddress, sourceAddress, byteCount, &dirty_map_words[(dest - 0x9800) / 32]);
-                    //_set_bg_cache_full(2);
-                }
-                else
-                {
-                    memcpy32(destAddress, sourceAddress, byteCount);
-                    SetDirtyTiles(dest, byteCount);
-                }
-            /*} else {  // HDMA
-                // Do something, Taipu
-                byteCount = 16;  // HDMA only copies 16 bytes at a time
+            if (dest >= 0x9800)
+            {
+                copy_map_and_compare(destAddress, sourceAddress, byteCount, &dirty_map_words[(dest - 0x9800) / 32]);
+                //_set_bg_cache_full(2);
+            }
+            else
+            {
                 memcpy32(destAddress, sourceAddress, byteCount);
-                if (done) {  // How do we check this?
-                    _doing_hdma = 0x00;
-                }
-            }*/
+                SetDirtyTiles(dest, byteCount);
+            }
 		} // else {}  // I guess DMA mode 1 is unused
 		
 	//finishBlock:
@@ -252,7 +181,6 @@ void VRAM_CODE DoDma(int byteCountRemaining)
 		_dma_dest += byteCount;
 		_dma_dest &= ~0xE000;
 		_dma_dest |= 0x8000;
-        if (_doing_hdma) break;
 	}
 }
 
