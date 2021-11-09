@@ -788,7 +788,24 @@ FF55_W:	@HDMA5
 	bne start_hdma
     @ General DMA code below
     @ Write HDMA cancel block here
+    ldrb_ r1,dma_blocks_total
+    cmp r1,#0
+    beq general_dma
+cancel_hdma:
+    stmfd sp!,{r0-r4,lr}
+    ldrb_ r0,dma_blocks_total
+    ldrb_ r1,dma_blocks_remaining
+    sub r0,r0,r1
+    lsl r0,r0,#4
+    blxeq_long DoDma
+    ldmfd sp!,{r0-r4,lr}
     
+    ldr r1,=_dma_blocks_total
+    mov r2,#0x00
+    strb r2,[r1]
+    
+    bx lr  @ I'm not sure if this is right or not
+general_dma:
     @ Steal cycles
 	ldr_ r1,cyclesperscanline
 	cmp r1,#DOUBLE_SPEED
@@ -1278,9 +1295,9 @@ FF54_R:	@HDMA4
 FF55_R:	@HDMA5
     ldrb_ r0,dma_blocks_remaining
     sub r0,r0,#1
-    ldrb_ r1,dma_blocks_total
-    cmp r1,#0
-    moveq r0,#0xFF
+    @ldrb_ r1,dma_blocks_total
+    @cmp r1,#0
+    @moveq r0,#0xFF
 	mov pc,lr
 
 
