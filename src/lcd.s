@@ -1852,19 +1852,14 @@ mode2_update_scroll:
 	
 @nowindow
 entermode0:
-    stmfd sp!,{r3,lr}
-    mov r0,#16
-    ldrb_ r1,doublespeed
-    cmp r1,#0
-    movne r0,#32  @ Double speed, copy 32 bytes
     ldrb_ r1,doing_hdma
     cmp r1,#0xFF
-    blxeq_long DoDma
+    bne entermode0_  @ If mid-HDMA, fall through
+tick_hdma:
+    stmfd sp!,{r3,lr}
+    mov r0,#16
+    blx_long DoDma
     ldmfd sp!,{r3,lr}
-@	ldrb r0,rendermode
-@	cmp r0,#0
-@	moveq r1,pc
-@	bxeq lr
 entermode0_:
 	mov r0,#0
 	strb_ r0,rendermode

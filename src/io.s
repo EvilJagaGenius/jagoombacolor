@@ -785,36 +785,32 @@ FF55_W:	@HDMA5
 	bic r0,r0,#0x80
 	
 	@immediately steal cycles if it's not HDMA
-    @ Wait a minute.  If it's not HDMA, that means bit 7 = 0... so if _doing_hdma, set _doing_hdma = false (0x00)
-	bne not_general_dma
+	beq general_dma
     
     @ HDMA code goes below
     mov r1,#0xFF
     ldr r2,=_doing_hdma
     strb r1,[r2]
     
-	ldr_ r1,cyclesperscanline
-	cmp r1,#DOUBLE_SPEED
 	add r1,r0,#1
     ldr r2,=_dma_blocks_remaining
     strb r1,[r2]
-	moveq r1,r1,lsl#1
-	mov r1,r1,lsl#(3 + CYC_SHIFT)
-	sub cycles,cycles,r1
+    
     @ If we're doing HDMA code, I don't think we want to fall through here
     bx lr
-not_general_dma:
+    
+general_dma:
+    @ Assuming this is the general DMA section here...
+    @ Set _doing_hdma to false
     ldr r2,=_doing_hdma
     mov r1,#0x00
-    strb r1,[r2]  @ Set _doing_hdma to false
+    strb r1,[r2]
     
 	stmfd sp!,{r3,lr}
 	add r0,r0,#1
 	mov r0,r0,lsl#4
-@	mov r11,r11
 	blx_long DoDma
-	ldmfd sp!,{r3,pc}  @ This is a glorified bx lr that preserves the state of the program before we called DoDma... how can I replicate this without making it a return statement
-@	bx lr
+	ldmfd sp!,{r3,pc}
 	
 @r0 = dest, r1 = src, r2 = byteCount, r3 = dirtyMapBits
 	global_func copy_map_and_compare
@@ -1282,7 +1278,6 @@ FF55_R:	@HDMA5
     ldrb_ r1,doing_hdma
     cmp r1,#0xFF
     subne r0,r0,#1  @ If not mid-hdma, subtract 1
-    @orrne r0,r0,#0x80
 	mov pc,lr
 
 
