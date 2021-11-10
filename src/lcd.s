@@ -176,8 +176,6 @@
 	
 	.global _dma_src
 	.global _dma_dest
-    .global _doing_hdma
-    .global _dma_blocks_remaining
 	.global _dirty_tile_bits
 @	.global _dirty_tiles
 @	.global _dirty_rows
@@ -3484,13 +3482,6 @@ FF41_W:@		LCD Status
 	strb r2,lcdstat
 	strb r2,lcdstat2
 	b lcdyc_check
-    
-    @ If _doing_hdma, call DoDma()... this might need to go somewhere else
-    @mov r0,#16          @ If we're doing hdma, only copy 16 bytes per hblank.  Don't know if r0's being used here
-    @ldr r1,=_doing_hdma
-    @ldr r1,[r1]
-    @cmp r1,#0xFF
-    @blxeq_long DoDma
 
 #if 0	
 	ands r1,r2,r0       @which bits have changed from 0 to 1?
@@ -4959,7 +4950,7 @@ _scanline:
 g_scanline:	.byte 0 @scanline
 _lcdyc:
 	.byte 0 @lcdyc
-_dma_blocks_remaining:	.byte 0 @dma_blocks_remaining @[unused] dma start address
+_dma_blocks_total:	.byte 0 @[unused] dma start address
 _bgpalette:
 	.byte 0 @bgpalette
 _ob0palette:
@@ -5022,7 +5013,8 @@ ui_border_visible:	.byte 0 @_ui_border_visible
 sgb_palette_number: .byte 0 @_sgb_palette_number
 gammavalue:	.byte 0 @_gammavalue
 darkness:	.byte 0 @_darkness
-_doing_hdma:	.byte 0 @doing_hdma
+_dma_blocks_remaining:	.byte 0
+
 
 _ui_border_cnt_bic:
 	.word 0 @ui_border_cnt_bic

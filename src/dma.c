@@ -6,8 +6,6 @@
 extern u16 _dma_src;
 extern u16 _dma_dest;
 extern u8 _vrambank;
-extern u8 _doing_hdma;
-extern u8 _dma_blocks_remaining;
 
 //void UpdateTiles1(u8 *sourceAddress, int byteCount, int vramAddress1);
 //void UpdateTiles2(u8 *sourceAddress, int byteCount, int vramAddress1);
@@ -183,10 +181,6 @@ void VRAM_CODE DoDma(int byteCountRemaining)
 		_dma_dest += byteCount;
 		_dma_dest &= ~0xE000;
 		_dma_dest |= 0x8000;
-        if (_doing_hdma) {
-            _dma_blocks_remaining -= 1;
-            break;
-        }
 	}
     // Out of the while loop
     if (_doing_hdma) {
