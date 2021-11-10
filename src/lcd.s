@@ -1850,14 +1850,6 @@ mode2_update_scroll:
 	
 @nowindow
 entermode0:
-    ldrb_ r1,doing_hdma
-    cmp r1,#0xFF
-    bne entermode0_  @ If mid-HDMA, fall through
-tick_hdma:
-    stmfd sp!,{r3,lr}
-    mov r0,#16
-    blx_long DoDma
-    ldmfd sp!,{r3,lr}
 entermode0_:
 	mov r0,#0
 	strb_ r0,rendermode
