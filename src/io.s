@@ -807,7 +807,7 @@ cancel_hdma:
     ldrb_ r1,dma_blocks_remaining
     sub r0,r0,r1
     lsls r0,r0,#4
-    blxeq_long DoDma
+    blxne_long DoDma
     ldmfd sp!,{r0-r4,lr}
     
     ldr r1,=_dma_blocks_total
