@@ -683,7 +683,16 @@ _FF70W:@		SVBK - CGB Mode Only - WRAM Bank
 	str_ r1,memmap_tbl+52
 	ldr r1,=wram_W
 	str_ r1,writemem_tbl+52
+    
+wram_remap_pc:
+	ldr_ r1,lastbank
+	sub gb_pc,gb_pc,r1
+	stmfd sp!,{r0}
+	encodePC
+	ldmfd sp!,{r0}
+
 	mov pc,lr
+
 select_gbc_ram:
  .if RESIZABLE
 	ldr_ r1,gbc_exram
@@ -698,7 +707,8 @@ select_gbc_ram:
 	ldr r1,=wram_W_2
 	str_ r1,writemem_tbl+52
 
-	mov pc,lr
+	@mov pc,lr
+    b wram_remap_pc
  .if RESIZABLE
 add_exram_:
 	stmfd sp!,{r0-addy,lr}
@@ -796,7 +806,7 @@ cancel_hdma:
     ldrb_ r0,dma_blocks_total
     ldrb_ r1,dma_blocks_remaining
     sub r0,r0,r1
-    lsl r0,r0,#4
+    lsls r0,r0,#4
     blxeq_long DoDma
     ldmfd sp!,{r0-r4,lr}
     
@@ -822,6 +832,10 @@ general_dma:
 	ldmfd sp!,{r3,pc}
     
 start_hdma:
+    ldrb_ r1,dmamode
+    cmp r1,#2
+    beq general_dma  @ For compatibility with Shantae and its multitude of speed hacks
+
     @ HDMA code below
     add r0,r0,#1
     ldr r1,=_dma_blocks_remaining
