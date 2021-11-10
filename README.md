@@ -4,9 +4,9 @@ A fork of Goomba Color with the goal of fixing bugs and incompatibilities in the
 
 The games I'd like to get running are:
 - Donkey Kong Land: New Colors Mode, https://www.romhacking.net/hacks/6076/.  Can't reach the file select screen.
-- Kirby's Dream Land DX Service Repair, https://www.romhacking.net/hacks/6224/.  Palette issues in Level 2 and onwards.
-- Konami GB Collections 2 and 4.  Don't boot, but should be fixed now.
-- Pokemon Crystal.  Heavy graphical corruption after displaying text.
+- Kirby's Dream Land DX Service Repair, https://www.romhacking.net/hacks/6224/.  Palette issues in Level 2 and onwards (should be fixed as of v0.2)
+- Konami GB Collections 2 and 4.  Don't boot (should be fixed as of v0.1)
+- Pokemon Crystal.  Heavy graphical corruption after displaying text (should be fixed as of v0.3)
 
 To build:
 - Install the latest DevkitPro GBA tools

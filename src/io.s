@@ -1309,9 +1309,6 @@ FF54_R:	@HDMA4
 FF55_R:	@HDMA5
     ldrb_ r0,dma_blocks_remaining
     sub r0,r0,#1
-    @ldrb_ r1,dma_blocks_total
-    @cmp r1,#0
-    @moveq r0,#0xFF
 	mov pc,lr
 
 

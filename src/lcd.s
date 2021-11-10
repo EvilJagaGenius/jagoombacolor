@@ -1850,10 +1850,14 @@ mode2_update_scroll:
 	
 @nowindow
 entermode0:
-@	ldrb r0,rendermode
-@	cmp r0,#0
-@	moveq r1,pc
-@	bxeq lr
+    ldrb_ r1,doing_hdma
+    cmp r1,#0xFF
+    bne entermode0_  @ If mid-HDMA, fall through
+tick_hdma:
+    stmfd sp!,{r3,lr}
+    mov r0,#16
+    blx_long DoDma
+    ldmfd sp!,{r3,lr}
 entermode0_:
 	mov r0,#0
 	strb_ r0,rendermode
@@ -5010,6 +5014,7 @@ sgb_palette_number: .byte 0 @_sgb_palette_number
 gammavalue:	.byte 0 @_gammavalue
 darkness:	.byte 0 @_darkness
 _dma_blocks_remaining:	.byte 0
+
 
 _ui_border_cnt_bic:
 	.word 0 @ui_border_cnt_bic

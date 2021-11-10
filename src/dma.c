@@ -182,6 +182,15 @@ void VRAM_CODE DoDma(int byteCountRemaining)
 		_dma_dest &= ~0xE000;
 		_dma_dest |= 0x8000;
 	}
+    // Out of the while loop
+    if (_doing_hdma) {
+        if (_dma_blocks_remaining == 0) {  // If we're done with HDMA
+            _doing_hdma = 0x00;
+            _dma_blocks_remaining = 0xFF;
+        }
+    } else {  // General DMA transfer is complete
+        _dma_blocks_remaining = 0xFF;
+    }
 }
 
 
