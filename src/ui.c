@@ -233,7 +233,9 @@ void ui()
 	{
 		get_saved_sram();
 	}
+#ifndef EZFLASH_OMEGA_BUILD
 	writeconfig();			//save any changes
+#endif
 #endif
 	scrolll(2);
 	/*
@@ -648,7 +650,9 @@ void restart()
 void exit_()
 {
 #if CARTSRAM
+#ifndef EZFLASH_OMEGA_BUILD
 	writeconfig();					//save any changes
+#endif
 #endif
 	fadetowhite();
 	REG_DISPCNT=FORCE_BLANK;		//screen OFF

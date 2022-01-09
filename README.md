@@ -3,7 +3,7 @@ Jaga's Goomba Color fork
 A fork of Goomba Color with the goal of fixing bugs and incompatibilities in the original.  Based on the 2019-05-04 source.
 
 The games I'd like to get running are:
-- Donkey Kong Land: New Colors Mode, https://www.romhacking.net/hacks/6076/.  Can't reach the file select screen.
+- Donkey Kong Land: New Colors Mode, https://www.romhacking.net/hacks/6076/.  Can't reach the file select screen (should be fixed as of v0.4)
 - Kirby's Dream Land DX Service Repair, https://www.romhacking.net/hacks/6224/.  Palette issues in Level 2 and onwards (should be fixed as of v0.2)
 - Konami GB Collections 2 and 4.  Don't boot (should be fixed as of v0.1)
 - Pokemon Crystal.  Heavy graphical corruption after displaying text (should be fixed as of v0.3)
@@ -21,3 +21,5 @@ Thanks to:
 - Dwedit for the Goomba Color emulator, which you can find at https://www.dwedit.org/gba/goombacolor.php.  If you'd like to incorporate my changes into Goomba Color, you're more than welcome to.
 - FluBBa for the Goomba emulator before that: http://goomba.webpersona.com/
 - Minucce for help with ASM and pointing me in the right direction.
+- Sterophonick for code tweaks and featuring Jagoomba in the excellent Simple kernel for the EZ-Flash Omega carts:
+- EZ-Flash for releasing the source to their modified Goomba Color builds, which hopefully allows this to support the Omega Definitive Edition's rumble features.

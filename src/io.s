@@ -802,13 +802,13 @@ FF55_W:	@HDMA5
     cmp r1,#0
     beq general_dma
 cancel_hdma:
-    stmfd sp!,{r0-r4,lr}
+    stmfd sp!,{r0-r12,lr}
     ldrb_ r0,dma_blocks_total
     ldrb_ r1,dma_blocks_remaining
     sub r0,r0,r1
     lsls r0,r0,#4
     blxne_long DoDma
-    ldmfd sp!,{r0-r4,lr}
+    ldmfd sp!,{r0-r12,lr}
     
     ldr r1,=_dma_blocks_total
     mov r2,#0x00
@@ -825,11 +825,11 @@ general_dma:
 	sub cycles,cycles,r1
     
     @ Immediately call DoDma
-    stmfd sp!,{r3,lr}
+    stmfd sp!,{r0-r12,lr}
 	add r0,r0,#1
 	mov r0,r0,lsl#4
 	blx_long DoDma
-	ldmfd sp!,{r3,pc}
+	ldmfd sp!,{r0-r12,pc}
     
 start_hdma:
     ldrb_ r1,dmamode

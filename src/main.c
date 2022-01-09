@@ -229,8 +229,11 @@ void C_entry()
 
 	#if RTCSUPPORT
 	*timeregs=1;
-	if(*timeregs & 1) rtc=1;
+    #ifndef EZFLASH_OMEGA_BUILD
+	if(*timeregs & 1)
 	#endif
+    rtc=1;
+    #endif
 	gbaversion=CheckGBAVersion();
 	vblankfptr=&vbldummy;
 	
