@@ -1426,6 +1426,7 @@ void writeconfig()
 	cfg->palettebank=palettebank;				//store current DMG palette
 	j = stime & 0x3;							//store current autosleep time
 //	j |= (gbadetect & 0x1)<<3;					//store current gbadetect setting
+	j |= (request_gb_type & 0x3)<<2;			//store current request_gb_type setting
 	j |= (autostate & 0x1)<<4;					//store current autostate setting
 	j |= (gammavalue & 0x7)<<5;					//store current gamma setting
 	cfg->misc = j;
@@ -1453,6 +1454,7 @@ void readconfig() {
 		i = cfg->misc;
 		stime = i & 0x3;						//restore current autosleep time
 //		gbadetect = (i & 0x08)>>3;				//restore current gbadetect setting
+		request_gb_type = (i & 0x0C)>>2;		//restore current request_gb_type setting
 		autostate = (i & 0x10)>>4;				//restore current autostate setting
 		gammavalue = (i & 0xE0)>>5;				//restore current gamma setting
 		sram_owner=cfg->sram_checksum;
