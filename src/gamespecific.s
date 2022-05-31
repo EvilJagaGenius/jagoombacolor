@@ -765,7 +765,7 @@ hack_game_names:
 	.asciz "MEGAMANX2SEB2XE"   @0703: spins on LCD stat and scanline, LCD scanline hack high
 	.asciz "BALLOON GB"	@JR Z hack (highram, and a / or a / cp), LCD scanline hack low
 	.asciz "CONKER CGB"	@JR Z hack (ram, and a / or a / cp)
-	@.asciz "DKL DX"	@JR NZ hack cp (hl)
+	@.asciz "DONKEYKONGLAND9"	@JR NZ hack cp (hl)
 	.asciz "BIONIC-COMMAV4E"  @speed hack
 	.byte 0
 	.align 2

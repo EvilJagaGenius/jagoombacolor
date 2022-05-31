@@ -68,10 +68,12 @@ mbc1init:
 MBC1map0:
 @----------------------------------------------------------------------------
 	ands r0,r0,#0x1f
-	moveq r0,#1
+    moveq r0,#1
 	strb_ r0,mapperdata
 	ldrb_ r1,mapperdata+1
 	orr r0,r0,r1,lsl#5
+    tst r0,#0x1f  @ r0 = rom bank.  If lower 5 bits = 0s
+    addeq r0,r0,#1  @ Add 1
 	b map4567_
 	
 	.pushsection .text
@@ -97,6 +99,8 @@ MBC1mode:
 	ldrb_ r1,mapperdata+1
 	orr r0,r0,r1,lsl#5
 	str lr,[sp,#-4]!
+    tst r0,#0x1f  @ r0 = rom bank.  If lower 5 bits = 0s
+    addeq r0,r0,#1  @ Add 1
 	bl map4567_
 	ldr lr,[sp],#4
 	b RamSelect
