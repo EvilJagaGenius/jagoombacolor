@@ -8,7 +8,7 @@ Some notable hacks and games that have had issues fixed:
 - Konami GB Collections 2 and 4 (boots)
 - Metal Gear Solid: Ghost Babel (elevator crash fixed)
 - Pokemon Crystal (graphical corruption fixed)
-- Wario Land DX https://www.romhacking.net/hacks/6683/ (boots)
+- Wario Land DX, https://www.romhacking.net/hacks/6683/ (boots)
 
 To build:
 - Install the latest DevkitPro GBA tools
@@ -17,7 +17,7 @@ To build:
 - Rename font.lz77.o to font.o and fontpal.bin.o to fontpal.o
 - make
 
-To test, I build a ROM with the resulting jagoombacolor.gba and the game I'm testing using goombafront.exe, then run it in mGBA.  You can find goombafront.exe as part of the Goomba Color releases.  For helpful debug symbols, take jagoombacolor.elf, put it in the same directory as the built ROM, and rename it to <ROM name>.elf.  (Thanks to Endrift for the tip.)
+To test, I build a ROM with the resulting jagoombacolor.gba and the game I'm testing using goombafront.exe, then run it in mGBA.  You can find goombafront.exe as part of the Goomba Color releases.  For helpful debug symbols, take jagoombacolor.elf, put it in the same directory as the built ROM, and rename it to (ROM name).elf.  (Thanks to Endrift for the tip.)
 Also included is a simple .bat file that will use gdb to dump debug symbols to a text file.
 
 Thanks to:
