@@ -61,6 +61,11 @@ mbc0init:
 mbc1init:
 @----------------------------------------------------------------------------
 	.word RamEnable,MBC1map0,MBC1map1,MBC1mode
+
+	ldr r0,=empty_W					@ Disable RAM = $00
+	str_ r0,writemem_tbl+40
+	str_ r0,writemem_tbl+44
+
 	mov pc,lr
 	
 	.popsection
@@ -109,6 +114,11 @@ MBC1mode:
 mbc2init:
 @----------------------------------------------------------------------------
 	.word MBC2RamEnable,MBC2map,void,void
+
+	ldr r0,=empty_W					@ Disable RAM = $00
+	str_ r0,writemem_tbl+40
+	str_ r0,writemem_tbl+44
+
 	mov pc,lr
 	.popsection
 @----------------------------------------------------------------------------
@@ -130,6 +140,11 @@ MBC2RamEnable:
 mbc3init:
 @----------------------------------------------------------------------------
 	.word RamEnable,map4567_,mbc3bank,mbc3latchtime
+
+	ldr r0,=empty_W					@ Disable RAM = $00
+	str_ r0,writemem_tbl+40
+	str_ r0,writemem_tbl+44
+
 	mov pc,lr
 @----------------------------------------------------------------------------
 mbc3latchtime:
@@ -200,6 +215,11 @@ calctime:
 mbc5init:
 @----------------------------------------------------------------------------
 	.word RamEnable,MBC5map0,MBC5RAMB,void
+
+	ldr r0,=empty_W					@ Disable RAM = $00
+	str_ r0,writemem_tbl+40
+	str_ r0,writemem_tbl+44
+
 	mov pc,lr
 	.popsection
 @----------------------------------------------------------------------------
@@ -286,6 +306,11 @@ huc1init:
 @----------------------------------------------------------------------------
 	.word RamEnable,HUC1map0,MBC1map1,MBC1mode
 @	DCD RamEnable,HUC1map0,MBC5RAMB,void
+
+	ldr r0,=empty_W					@ Disable RAM = $00
+	str_ r0,writemem_tbl+40
+	str_ r0,writemem_tbl+44
+
 	mov pc,lr
 	.popsection
 @----------------------------------------------------------------------------
@@ -303,6 +328,11 @@ HUC1map0:
 huc3init:
 @----------------------------------------------------------------------------
 	.word RamEnable,map4567_,MBC5RAMB,void
+
+	ldr r0,=empty_W					@ Disable RAM = $00
+	str_ r0,writemem_tbl+40
+	str_ r0,writemem_tbl+44
+
 	mov pc,lr
 
 @----------------------------------------------------------------------------
@@ -311,6 +341,11 @@ mbc4init:
 mbc6init:
 @----------------------------------------------------------------------------
 	.word RamEnable,map4567_,void,void
+
+	ldr r0,=empty_W					@ Disable RAM = $00
+	str_ r0,writemem_tbl+40
+	str_ r0,writemem_tbl+44
+
 	mov pc,lr
 	.popsection
 
