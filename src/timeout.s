@@ -459,11 +459,17 @@ checkTimerIRQ:
 noTimerIRQ:
 	str_ r0,timercounter
 noTimer:
-	ldrb_ r1,gb_if
-	tst r1,#0x08			@Serial
-	ldrneb_ r0,stctrl
-	andne r0,r0,#0x7F		@Clear Serial Transfer flag.
-	strneb_ r0,stctrl
+	ldrb_ r1,stctrl
+	and r1,r1,#0x81
+	cmp r1,#0x81		@Are going to transfer on internal clock?
+
+	ldreqb_ r1,gb_if		@IRQ flags
+	orreq r1,r1,#8		@8=Serial
+	streqb_ r1,gb_if
+
+	ldreqb_ r0,stctrl
+	andeq r0,r0,#0x7F		@Clear Serial Transfer flag.
+	streqb_ r0,stctrl
 checkMasterIRQDelayed:
 	tst cycles,#CYC_IE
 	beq _GO

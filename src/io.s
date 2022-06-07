@@ -1209,11 +1209,6 @@ _FF01W:@		SB - Serial Transfer Data
 _FF02W:@		SC - Serial Transfer Ctrl
 @----------------------------------------------------------------------------
 	strb_ r0,stctrl
-	and r0,r0,#0x81
-	cmp r0,#0x81		@Are going to transfer on internal clock?
-	ldreqb_ r0,gb_if		@IRQ flags
-	orreq r0,r0,#8		@8=Serial
-	streqb_ r0,gb_if
 	mov pc,lr
 @----------------------------------------------------------------------------
 _FF56W:@		RP - Infrared Port
