@@ -1,0 +1,27 @@
+on:
+  workflow_dispatch:
+  push:
+
+jobs:
+
+  builder:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3.0.2
+
+
+      - shell: bash
+        run: |
+          docker pull devkitpro/devkitarm
+          docker run \
+            --volume "${{ github.workspace }}:/${{ github.workspace }}" \
+            --workdir "${{ github.workspace }}" \
+            devkitpro/devkitarm \
+            make
+
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: jagoomba-color
+          path: ./**.gba
