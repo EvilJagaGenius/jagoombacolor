@@ -334,10 +334,14 @@ GFX_reset:	@called with CPU reset
 	@get GBC palette
 	ldr_ r0,memmap_tbl
 	blx_long GetGbcPaletteNumber
-	@if zero, pick greyscale
-	cmp r0,#0
-	moveq r0,#01
+	@if no GBC palette saved, pick greyscale
 	ldr r1,=palettebank
+	ldr r2,[r1]
+	cmp r1,#0
+	moveq r2,#01
+	@if no GBC palette detected, use saved or greyscale
+	cmp r0,#0
+	moveq r0,r2
 	strb r0,[r1]
 	bl paletteinit
 1:
