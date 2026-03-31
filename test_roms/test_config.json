@@ -175,5 +175,121 @@
             }
         ],
         "expected_fail": false
+    },
+    "Shantae (USA)": {
+        "description": "Shantae (upstream #3) - HDMA sprite rendering, title screen and intro",
+        "frames": 1800,
+        "inputs": [
+            "1200:Start"
+        ],
+        "screenshots": [
+            {
+                "frame": 600,
+                "name": "wayforward"
+            },
+            {
+                "frame": 1500,
+                "name": "title"
+            }
+        ],
+        "expected_fail": false
+    },
+    "Mega Man - Dr. Wily's Revenge (USA)": {
+        "description": "Mega Man 1 GB (upstream #31) - status bar flicker during gameplay",
+        "frames": 3600,
+        "inputs": [
+            "300:Start",
+            "600:Start",
+            "900:A"
+        ],
+        "screenshots": [
+            {
+                "frame": 1200,
+                "name": "select"
+            },
+            {
+                "frame": 2400,
+                "name": "gameplay"
+            }
+        ],
+        "expected_fail": false
+    },
+    "Super Mario Land 2 - 6 Golden Coins (USA, Europe) (Rev 2)": {
+        "description": "Super Mario Land 2 (upstream #33) - savestate regression, gameplay check",
+        "frames": 2400,
+        "inputs": [
+            "600:Start",
+            "900:Start"
+        ],
+        "screenshots": [
+            {
+                "frame": 300,
+                "name": "title"
+            },
+            {
+                "frame": 1800,
+                "name": "gameplay"
+            }
+        ],
+        "expected_fail": false
+    },
+    "Crystalis (USA)": {
+        "description": "Crystalis (upstream #10) - tile flicker during scrolling",
+        "frames": 3600,
+        "inputs": [
+            "600:Start",
+            "900:Start",
+            "1200:A"
+        ],
+        "screenshots": [
+            {
+                "frame": 300,
+                "name": "nintendo"
+            },
+            {
+                "frame": 3000,
+                "name": "nameentry"
+            }
+        ],
+        "expected_fail": false
+    },
+    "Lufia - The Legend Returns (USA)": {
+        "description": "Lufia (upstream #10) - garbled world map tiles",
+        "frames": 3600,
+        "inputs": [
+            "300:Start",
+            "600:A",
+            "900:Start"
+        ],
+        "screenshots": [
+            {
+                "frame": 1200,
+                "name": "natsume"
+            },
+            {
+                "frame": 2400,
+                "name": "title"
+            }
+        ],
+        "expected_fail": false
+    },
+    "Cannon Fodder (USA) (En,Fr,De,Es,It)": {
+        "description": "Cannon Fodder GBC (upstream #28) - menu graphics/audio distortion",
+        "frames": 1800,
+        "inputs": [
+            "300:Start",
+            "600:A"
+        ],
+        "screenshots": [
+            {
+                "frame": 300,
+                "name": "splash"
+            },
+            {
+                "frame": 1500,
+                "name": "menu"
+            }
+        ],
+        "expected_fail": false
     }
 }
