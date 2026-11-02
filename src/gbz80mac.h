@@ -18,6 +18,12 @@
 	add gb_pc,gb_pc,r0
 	.endm
 
+	.macro jr_wrapcheck		@JR backwards from $00xx wraps to $FFxx, leaving gb_pc just below
+	eor r1,gb_pc,#0x06000000	@the copy of bank 0 at 0x0600FE00 (bank_1 in cache.c)
+	cmp r1,#0xFE00
+	bllo jr_wrap
+	.endm		@r1=?
+
 	.macro encodePC_afterpush16		@push16 already does "adr r2,memmap_tbl"
 	and r1,gb_pc,#0xF000
 @	adr r2,memmap_tbl

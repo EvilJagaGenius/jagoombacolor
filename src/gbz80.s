@@ -253,6 +253,7 @@ _18:@	JR *	relative jump
 @----------------------------------------------------------------------------
 	ldrsb r0,[gb_pc],#1
 	add gb_pc,gb_pc,r0
+	jr_wrapcheck
 	fetch 8
 #if SPEEDHACKS_NEW
 @----------------------------------------------------------------------------
@@ -260,12 +261,26 @@ _18x:@	JR *	relative jump
 @----------------------------------------------------------------------------
 	ldrsb r0,[gb_pc],#1
 	add gb_pc,gb_pc,r0
+	jr_wrapcheck
 _18x_modify:
 	cmp r0,#-4
 	bleq speedhack_check
 fetch8:
 	fetch 8
 #endif
+@----------------------------------------------------------------------------
+jr_wrap:	@re-encode gb_pc after a JR wrapped below $0000 (e.g. into HRAM), keeps r0
+@----------------------------------------------------------------------------
+	ldr_ r1,lastbank
+	sub r1,gb_pc,r1
+	mov r1,r1,lsl#16
+	mov gb_pc,r1,lsr#16
+	and r1,gb_pc,#0xF000
+	adr_ r2,memmap_tbl
+	ldr r2,[r2,r1,lsr#10]
+	str_ r2,lastbank
+	add gb_pc,gb_pc,r2
+	bx lr
 @----------------------------------------------------------------------------
 _19:@	ADD HL,DE
 @----------------------------------------------------------------------------
@@ -312,6 +327,7 @@ _20:@	JR NZ,*	jump if not zero
 	ldrsb r0,[gb_pc],#1
 	addeq gb_pc,gb_pc,r0
 	subeq cycles,cycles,#4*CYCLE
+	jr_wrapcheck
 nobranch:
 	fetch 8
 #if SPEEDHACKS_NEW
@@ -322,6 +338,7 @@ _20x:@	JR NZ,*	jump if not zero - speedhack version
 	ldrsb r0,[gb_pc],#1
 	bne nobranch
 	add gb_pc,gb_pc,r0
+	jr_wrapcheck
 _20x_modify:
 	cmp r0,#-4
 	bleq speedhack_check
@@ -390,6 +407,7 @@ _28:@	JR Z,*	jump if zero
 @	beq _28_
 	addne gb_pc,gb_pc,r0
 	subne cycles,cycles,#4*CYCLE
+	jr_wrapcheck
 @	cmp r0,#-4
 @	andeq cycles,cycles,#CYC_MASK
 _28_:
@@ -403,6 +421,7 @@ _28x:@	JR Z,*	jump if zero - speedhack version
 	ldrsb r0,[gb_pc],#1
 	beq nobranch
 	add gb_pc,gb_pc,r0
+	jr_wrapcheck
 _28x_modify:
 	cmp r0,#-4
 	bleq speedhack_check
@@ -559,6 +578,7 @@ _30:@	JR NC,*	jump if no carry
 	ldrsb r0,[gb_pc],#1
 	addeq gb_pc,gb_pc,r0
 	subeq cycles,cycles,#4*CYCLE
+	jr_wrapcheck
 	fetch 8
 #if SPEEDHACKS_NEW
 @----------------------------------------------------------------------------
@@ -568,6 +588,7 @@ _30x:@	JR NC,*	jump if no carry - speedhack version
 	ldrsb r0,[gb_pc],#1
 	bne nobranch
 	add gb_pc,gb_pc,r0
+	jr_wrapcheck
 _30x_modify:
 	cmp r0,#-4
 	bleq speedhack_check
@@ -626,6 +647,7 @@ _38:@	JR C,*	jump if carry
 	ldrsb r0,[gb_pc],#1
 	addne gb_pc,gb_pc,r0
 	subne cycles,cycles,#4*CYCLE
+	jr_wrapcheck
 	fetch 8
 #if SPEEDHACKS_NEW
 @----------------------------------------------------------------------------
@@ -635,6 +657,7 @@ _38x:@	JR C,*	jump if carry - speedhack version
 	ldrsb r0,[gb_pc],#1
 	beq nobranch
 	add gb_pc,gb_pc,r0
+	jr_wrapcheck
 _38x_modify:
 	cmp r0,#-4
 	bleq speedhack_check
